@@ -1,75 +1,112 @@
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import CoffeeCard from './components/CoffeeCard';
 
 export default function App() {
+  const [name, setName] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleOrder = () => {
+    if (name.trim() === '') {
+      setMessage('Por favor, informe seu nome!');
+    } else {
+      setMessage(`Olá, ${name}! Seu pedido foi recebido`);
+    }
+  }
+
   return (
-    <ScrollView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.headerTitle}>Café do Código</Text>
-          <Text style={styles.headerSubtitle}>Seu café, uma linha por vez</Text>
-        </View>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior='padding'
+      keyboardVerticalOffset={30}
+    >
+      <ScrollView>
+        {/* Header */}
+        <Header />
+        {/* Header */}
 
-        <View style={styles.avatarPlaceholder}>
-          <Ionicons name="person" size={20} color="#2f2b2c"></Ionicons>
-        </View>
-      </View>
-      {/* Header */}
+        {/* Body */}
+        <View style={styles.content}>
 
-      {/* Body */}
-      <View style={styles.content}>
-
-        {/* Title */}
-        <View style={styles.contentInitial}>
-          <Text style={styles.contentTitle}>Bom dia!</Text>
-          <Text style={styles.contentSubtitle}>Que tal um café hoje?</Text>
-        </View>
-        {/* Title */}
-
-        {/* Card */}
-        <View style={styles.featured}>
-          <Image 
-            source={require('./assets/coffee.jpg')}
-            style={styles.image}>
-          </Image>
-          <Text style={styles.featuredTitle}>Cappucino Especial</Text>
-          <Text style={styles.featuredDescription}>Cremoso e delicioso</Text>
-          <Text style={styles.featuredPrice}>R$ 12,90</Text>
-        </View>
-        {/* Card */}
-
-        {/* Section */}
-        <Text style={styles.sectionTitle}>Nosso cardápio</Text>
-
-        <View style={styles.menu}>
-          <View style={styles.cardItem}>
-            <Text style={styles.cardTitle}>Espresso</Text>
-            <Text style={styles.cardDescription}>Puro e forte</Text>
-            <Text style={styles.cardPrice}>R$ 7,00</Text>
+          {/* Title */}
+          <View style={styles.contentInitial}>
+            <Text style={styles.contentTitle}>Bom dia!</Text>
+            <Text style={styles.contentSubtitle}>Que tal um café hoje?</Text>
           </View>
-          <View style={styles.cardItem}>
-            <Text style={styles.cardTitle}>Cappucino</Text>
-            <Text style={styles.cardDescription}>Clássico com espuma</Text>
-            <Text style={styles.cardPrice}>R$ 12,90</Text>
-          </View>
-          <View style={styles.cardItem}>
-            <Text style={styles.cardTitle}>Latte</Text>
-            <Text style={styles.cardDescription}>Leite cremoso</Text>
-            <Text style={styles.cardPrice}>R$ 11,50</Text>
-          </View>
-          <View style={styles.cardItem}>
-            <Text style={styles.cardTitle}>Mocha</Text>
-            <Text style={styles.cardDescription}>Toque de chocolate</Text>
-            <Text style={styles.cardPrice}>R$ 13,50</Text>
-          </View>
-        </View>
-        {/* Section */}
+          {/* Title */}
 
-      </View>
-      {/* Body */}
-    </ScrollView>
+          {/* Card */}
+          <View style={styles.featured}>
+            <Image
+              source={require('./assets/coffee.jpg')}
+              style={styles.image}>
+            </Image>
+            <Text style={styles.featuredTitle}>Cappucino Especial</Text>
+            <Text style={styles.featuredDescription}>Cremoso e delicioso</Text>
+            <Text style={styles.featuredPrice}>R$ 12,90</Text>
+          </View>
+          {/* Card */}
+
+          {/* Section */}
+          <Text style={styles.sectionTitle}>Nosso cardápio</Text>
+
+          {/* Menu */}
+          <View style={styles.menu}>
+            <CoffeeCard
+              name='Espresso'
+              description='Puro e forte'
+              price='7,00'
+            />
+            <CoffeeCard
+              name='Cappucino'
+              description='Classico com espuma'
+              price='12,90'
+            />
+            <CoffeeCard
+              name='Latte'
+              description='Leite cremoso'
+              price='11,50'
+            />
+            <CoffeeCard
+              name='Mocha'
+              description='Toque de chocolate'
+              price='13,50'
+            />
+          </View>
+
+          {/* Menu */}
+
+          <View style={styles.orderSection}>
+            <Text style={styles.question}>Qual é o seu nome?</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Digite seu nome"
+              value={name}
+              onChangeText={setName}
+            ></TextInput>
+
+            <TouchableOpacity style={styles.button} onPress={handleOrder}>
+              <Text style={styles.buttonText}>Fazer um pedido</Text>
+            </TouchableOpacity>
+
+            {message !== '' && (
+              <Text style={styles.messageText}>{message}</Text>
+            )}
+          </View>
+          {/* Section */}
+
+        </View>
+        {/* Body */}
+
+        {/* Footer */}
+        <Footer />
+        {/* Footer */}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -77,37 +114,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f9f9f9'
-  
-  //Header
   },
-  header: {
-    width: '100%',
-    paddingTop: 60,
-    paddingHorizontal: 24,
-    paddingBottom: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: "#2F2D2C"
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: "#9B9B9B",
-    marginTop: 4
-  },
-  avatarPlaceholder: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "#F0F0F0",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  //Header
 
   //Body
   content: {
@@ -138,7 +145,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 32,
     shadowColor: "#000000",
-    shadowOffset: {width: 0, height: 8},
+    shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.05,
     elevation: 4
   },
@@ -173,42 +180,63 @@ const styles = StyleSheet.create({
     color: "#2F2D2C",
     marginBottom: 16
   },
+
+  //Menu
   menu: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
     marginBottom: 20
   },
-  cardItem: {
-    width: "48%",
+  //Menu
+
+  //orderSection
+  orderSection: {
+    padding: 24,
     backgroundColor: "#FFFFFF",
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: 24,
     shadowColor: "#000000",
-    shadowOffset: {width: 0, height: 4},
-    shadowOpacity: 0.05,
-    elevation: 3,
-    marginBottom: 16,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.5,
+    elevation: 4,
+    marginTop: 10
   },
-  cardTitle: {
+  question: {
+    fontSize: 18,
+    fontWeight: "800",
+    color: "#2F2D2C",
+    marginBottom: 16
+  },
+  input: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "#F0F0F0",
+    borderRadius: 16,
+    paddingHorizontal: 20,
+    fontSize: 16
+  },
+  button: {
+    width: "100%",
+    backgroundColor: "#C67C4E",
+    borderRadius: 30,
+    paddingHorizontal: 30,
+    paddingVertical: 16,
+    alignItems: "center",
+    marginTop: 20
+  },
+  buttonText: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#2F2D2C"
+    color: "#FFFFFF"
   },
-  cardDescription: {
-    fontSize: 12,
-    color: "#9B9B9B",
-    marginTop: 4,
-    lineHeight: 16
-  },
-  cardPrice: {
+  messageText: {
     fontSize: 16,
     fontWeight: "800",
     color: "#C67C4E",
-    marginTop: 12
-  }
+    alignItems: "center",
+    marginTop: 20
+  },
+  //orderSection
   //Section
-
   //Body
 })
-
