@@ -22,12 +22,6 @@ export default function CoffeeCard({
 
 const styles = StyleSheet.create({
   //Menu
-  menu: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    marginBottom: 20
-  },
   cardItem: {
     width: "48%",
     backgroundColor: "#FFFFFF",
